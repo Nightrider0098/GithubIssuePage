@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 const con = require('./mysql-connection');
 const port = process.env.PORT || 5400;
 const bodyParser = require('body-parser');
 const cors = require('cors')
-var corsOption = { origin: 'http://localhost:3000' }
-app.use(cors(corsOption))
+var corsOption = { origin: ['http://localhost:3000','http://localhost:5000','file:///D:/2020%20Study/issue-page-backend/issue-page-frontend/build/index.html' ]}
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 const uuid = require("uuid-v4")
@@ -116,6 +117,13 @@ app.delete('/delete-issue', (req, res) => {
     update_id = uuid()
     con.query('insert into updateId values("' + update_id + '")', (err) => { if (err) console.log("error occured while inserting updated id", err) })
 })
+try{
+app.use(express.static(path.join(__dirname, 'issue-page-frontend','build')));}
+catch{
+console.log('running withour react')}
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname,'issue-page-frontend','build','index.html'));
+});
 
 con.query('select count(*) from issueDatabase', (err, result) => {
     if (err) console.log(err)
@@ -134,10 +142,10 @@ con.query('select * from updateid', (err, result) => {
 })
 
 if(process.env.NODE_ENV==='production'){
-	app.use(express.static('issue-page-frontend/build')
+	app.use(express.static(path.join(__dirname, 'issue-page-frontend','build')));
 }
 
 
 app.listen(port, () => {
-    console.log("listening to Signal..........")
+    console.log("listening to Signal on port "+port)
 })

@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "mysql-connection.js",
+  "homepage":".",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"build":"cd issue-page-backend && npm run build",
-	"install-client":"cd client && npm install",
-	"heroku-postbuild":"npm run install-client && npm run build",
+    "build": "cd issue-page-frontend && npm run build",
+    "install-client": "cd issue-page-frontend && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "start": "node server.js"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mysql": "^2.18.1",
     "uuid": "^8.3.0",
     "uuid-v4": "^0.1.0",
     "uuidv4": "^6.2.3"
