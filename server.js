@@ -18,7 +18,7 @@ app.post('/add-issue', (req, res) => {
     var author = req.body.author || 'rahul0901'
     var tags = req.body.tags
     console.log('accepted')
-    con.query('insert into issueDatabase(topic,author,tags,creationdate,comments,commentcount,closed) values("' + topic + '","' + author + '","' + JSON.stringify(tags) + '",current_timestamp(),"[]",0,0)', (err) => {
+    con.query(`insert into issueDatabase(topic,author,tags,creationdate,comments,commentcount,closed) values('` + topic + `',"` + author + `","` + JSON.stringify(tags) + `",current_timestamp(),"[]",0,0)`, (err) => {
         if (err) console.log(err);
         else console.log("new issue arrived");
         res.send('ok')
@@ -36,12 +36,12 @@ app.get('/list-issue', (req, res) => {
     // console.log(id,page)
     if (id === undefined) {
         if (isclosed === undefined)
-            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase limit " + page * 10 + ",10", (err, result) => {
+            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase limit " + page * 16 + ",16", (err, result) => {
                 if (err) console.log(err)
                 else res.send({ data: result, updateId: update_id, issueCount: issueCount, closeCount: closeCount })
             })
         else {
-            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase where closed=" + isclosed + " limit " + page * 10 + ",10", (err, result) => {
+            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase where closed=" + isclosed + " limit " + page * 16 + ",16", (err, result) => {
                 if (err) console.log(err)
                 else res.send({ data: result, updateId: update_id, issueCount: issueCount, closeCount: closeCount })
             })
@@ -121,6 +121,7 @@ console.log('running withour react')}
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname,'issue-page-frontend','build','index.html'));
 });
+
 
 con.query('select count(*) from issueDatabase', (err, result) => {
     if (err) console.log(err)
