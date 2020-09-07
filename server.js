@@ -18,14 +18,14 @@ app.post('/add-issue', (req, res) => {
     var author = req.body.author || 'rahul0901'
     var tags = req.body.tags
     console.log('accepted')
-    con.query('insert into IssueDatabase(topic,author,tags,creationdate,comments,commentcount,closed) values("' + topic + '","' + author + '","' + JSON.stringify(tags) + '",current_timestamp(),"[]",0,0)', (err) => {
+    con.query('insert into issueDatabase(topic,author,tags,creationdate,comments,commentcount,closed) values("' + topic + '","' + author + '","' + JSON.stringify(tags) + '",current_timestamp(),"[]",0,0)', (err) => {
         if (err) console.log(err);
         else console.log("new issue arrived");
         res.send('ok')
         issueCount += 1
         console.log("sucess!!")
-        update_id = uuid()
-        con.query('insert into updateId values("' + update_id + '")', (err) => { if (err) console.log("error occured while inserting updated id", err) })
+       
+      
     })
 })
 app.get('/list-issue', (req, res) => {
@@ -36,12 +36,12 @@ app.get('/list-issue', (req, res) => {
     // console.log(id,page)
     if (id === undefined) {
         if (isclosed === undefined)
-            con.query("select id,topic,author,tags,creationdate,commentCount,closed from IssueDatabase limit " + page * 10 + ",10", (err, result) => {
+            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase limit " + page * 10 + ",10", (err, result) => {
                 if (err) console.log(err)
                 else res.send({ data: result, updateId: update_id, issueCount: issueCount, closeCount: closeCount })
             })
         else {
-            con.query("select id,topic,author,tags,creationdate,commentCount,closed from IssueDatabase where closed=" + isclosed + " limit " + page * 10 + ",10", (err, result) => {
+            con.query("select id,topic,author,tags,creationdate,commentCount,closed from issueDatabase where closed=" + isclosed + " limit " + page * 10 + ",10", (err, result) => {
                 if (err) console.log(err)
                 else res.send({ data: result, updateId: update_id, issueCount: issueCount, closeCount: closeCount })
             })
@@ -49,7 +49,7 @@ app.get('/list-issue', (req, res) => {
     }
     else {
 
-        con.query("select * from IssueDatabase where id=" + id, (err, result) => {
+        con.query("select * from issueDatabase where id=" + id, (err, result) => {
             if (err) console.log('error \n', err)
             res.send(result[0])
         })
@@ -92,8 +92,7 @@ app.patch("/update-issue", (req, res) => {
 
         })
     }
-    update_id = uuid()
-    con.query('insert into updateId values("' + update_id + '")', (err) => { if (err) console.log("error occured while inserting updated id", err) })
+    
     // res.send('No such issue id')
 })
 
@@ -114,8 +113,6 @@ app.delete('/delete-issue', (req, res) => {
         else res.send('No such record')
     })
 
-    update_id = uuid()
-    con.query('insert into updateId values("' + update_id + '")', (err) => { if (err) console.log("error occured while inserting updated id", err) })
 })
 try{
 app.use(express.static(path.join(__dirname, 'issue-page-frontend','build')));}
@@ -136,10 +133,6 @@ con.query('select count(*) from issueDatabase where closed=0', (err, result) => 
     else closeCount = result[0]['count(*)']
 })
 
-con.query('select * from updateid', (err, result) => {
-    update_id = result[result.length - 1]['last_update_id']
-
-})
 
 if(process.env.NODE_ENV==='production'){
 	app.use(express.static(path.join(__dirname, 'issue-page-frontend','build')));
