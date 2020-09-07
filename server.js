@@ -29,7 +29,7 @@ app.post('/add-issue', (req, res) => {
     })
 })
 app.get('/list-issue', (req, res) => {
-    var page = req.query.page;
+    var page = req.query.page ||0;
     var id = req.query.id
     var isclosed = req.query.isclosed || undefined;
     if (isclosed === 'undefined') isclosed = undefined;

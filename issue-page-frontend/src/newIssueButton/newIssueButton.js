@@ -22,6 +22,10 @@ export class newIssueButton extends Component {
         };
         fetch('http://localhost:5400/add-issue', requestOptions).then(res => { return res.json() }).then(res => {
             document.getElementById('closeModal').click()
+			this.setState = {
+            title: "",
+            comment: ''
+        }
         })
         this.props.refreshPage(undefined)
 

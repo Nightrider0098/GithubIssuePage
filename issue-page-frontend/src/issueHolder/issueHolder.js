@@ -25,7 +25,7 @@ export default class searchBar extends Component {
         }
         if (this.state.data.length > this.state.records)
             retun_arry.push(<td style={{ 'border': 'none' }}></td>)
-        for (; i < this.state.records  +this.state.laterRecords; i++) {
+        for (; i < (this.state.records  +this.state.laterRecords); i++) {
             retun_arry.push(<IssueSmall name={this.state.data[i]} />)
         }
         return retun_arry
