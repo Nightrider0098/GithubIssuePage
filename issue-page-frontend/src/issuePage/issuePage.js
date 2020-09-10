@@ -25,7 +25,7 @@ class issuePage extends Component {
 
     UpdateRecords(page) {
 
-        fetch('http://localhost:5400/list-issue?page=' + page + '&isclosed=' + this.state.closed).then((res) => {
+        fetch('/list-issue?page=' + page + '&isclosed=' + this.state.closed).then((res) => {
             return res.json()
         }).then((data) => {
             this.setState({ data: data.data, totalIssue: data.issueCount, closeIssue: data.closeCount })

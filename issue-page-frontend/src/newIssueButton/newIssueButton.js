@@ -20,7 +20,7 @@ export class newIssueButton extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: this.state.title, comment: this.state.comment })
         };
-        fetch('http://localhost:5400/add-issue', requestOptions).then(res => { return res.json() }).then(res => {
+        fetch('/add-issue', requestOptions).then(res => { return res.json() }).then(res => {
             document.getElementById('closeModal').click()
 			this.setState = {
             title: "",
